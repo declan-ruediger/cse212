@@ -6,7 +6,7 @@ ArraySelector.Run();
 
 // Uncomment when you are ready to run this
 // Console.WriteLine("\n======================\nAlgorithms\n======================");
-// Algorithms.Run();
+Algorithms.Run();
 
 
 
