@@ -13,7 +13,17 @@ public static class Arrays
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return []; // replace this return statement with your own
+        // Initialise a List
+        var result = Array.Empty<double>();
+        // Loop [length] times, starting at 1
+        for (int i = 1; i <= length; i++)
+        {
+            // Add [number] * [loop index] to the list
+            result = result.Append(number * i).ToArray();
+        }
+
+        // Return the List
+        return result; // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +39,12 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        // result = last [amount] numbers + first numbers, excluding the last [amount] numbers
+
+        // Add last [amount] numbers before first numbers
+        data.InsertRange(0, data.GetRange(data.Count()-amount, amount));
+        // Exclude the last [amount] numbers
+        data.RemoveRange(data.Count()-amount, amount);
     }
 }
