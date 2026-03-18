@@ -21,8 +21,35 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        string[] results = [];
+
+        var wordSet = words.ToHashSet();
+        var usedWords = new HashSet<string>();
+        
+        foreach (string twoLetters in wordSet)
+        {
+            // Check this words hasn't already been checked
+            if (usedWords.Contains(twoLetters))
+            {
+                continue;
+            }
+            
+            string reversedTwoLetters = new string(twoLetters.ToCharArray().Reverse().ToArray());
+
+            // Special case: two letters are the same: skip
+            if (reversedTwoLetters == twoLetters)
+            {
+                continue;
+            }
+            if (wordSet.Contains(reversedTwoLetters))
+            {
+                results = results.Append($"{twoLetters} & {reversedTwoLetters}").ToArray();
+                usedWords.Add(twoLetters);
+                usedWords.Add(reversedTwoLetters);
+            }
+        }
+        
+        return results;
     }
 
     /// <summary>
@@ -43,6 +70,13 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
+            var degree = fields[3];
+
+            if (!degrees.ContainsKey(degree)) {
+                degrees[degree] = 0;
+            }
+
+            degrees[degree] += 1;
         }
 
         return degrees;
@@ -66,8 +100,34 @@ public static class SetsAndMaps
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
     {
-        // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        // Construct a dictionary mapping the number of occurences of each letter in word 1:
+        Dictionary<char, int> word1_letters = new();
+        foreach (char letter in word1.ToUpper()) {
+            if (letter == ' ')
+            {
+                continue;
+            }
+            if (!word1_letters.ContainsKey(letter)) {
+                word1_letters[letter] = 0;
+            }
+            word1_letters[letter] += 1;
+        }
+        
+        // Do the same for word 2:
+        Dictionary<char, int> word2_letters = new();
+        foreach (char letter in word2.ToUpper()) {
+            if (letter == ' ')
+            {
+                continue;
+            }
+            if (!word2_letters.ContainsKey(letter)) {
+                word2_letters[letter] = 0;
+            }
+            word2_letters[letter] += 1;
+        }
+        
+        // Check that there is the same number of keys in each dicitonary AND that there is no differences between them
+        return word1_letters.Count == word2_letters.Count && !word1_letters.Except(word2_letters).Any();
     }
 
     /// <summary>
@@ -96,11 +156,13 @@ public static class SetsAndMaps
 
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO Problem 5:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to create a string out each place a earthquake has happened today and its magitude.
-        // 3. Return an array of these string descriptions.
-        return [];
+        string[] descriptions = [];
+        
+        foreach(Feature feature in featureCollection.Features)
+        {
+            descriptions = descriptions.Append($"{feature.Properties.Place} - Mag {feature.Properties.Mag}").ToArray();
+        }
+
+        return descriptions;
     }
 }
